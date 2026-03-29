@@ -1,0 +1,5 @@
+{
+  "name": "Phone Store Manager",
+  "description": "A phone store management application with Supabase authentication and CRUD operations.",
+  "requestFramePermissions": []
+}

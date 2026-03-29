@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  @apply font-sans text-gray-900 bg-gray-50;
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Global Ant Design Overrides */
+.ant-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.ant-btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.ant-modal-content {
+  border-radius: 32px !important;
+  overflow: hidden !important;
+}
+
+.ant-modal-header {
+  margin-bottom: 0 !important;
+  padding: 24px 24px 16px !important;
+}
+
+.ant-modal-body {
+  padding: 0 24px 24px !important;
+}
+
+.ant-input, .ant-input-number, .ant-select-selector {
+  border-radius: 12px !important;
+}
+
+.ant-select-selector {
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-table-thead > tr > th {
+  background: #f9fafb !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  font-size: 11px !important;
+  letter-spacing: 0.05em !important;
+  color: #6b7280 !important;
+}
+
+.ant-table-row {
+  transition: all 0.2s !important;
+}
+
+.ant-table-row:hover {
+  background-color: #f3f4f6 !important;
+}
+
+/* Custom Uploader Styling */
+.uploader-custom .ant-upload {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 120px !important;
+  border-radius: 24px !important;
+  border: 2px dashed #e5e7eb !important;
+  background: #fff !important;
+  transition: all 0.3s !important;
+}
+
+.uploader-custom .ant-upload:hover {
+  border-color: #1677ff !important;
+  background: #f0f7ff !important;
+}
