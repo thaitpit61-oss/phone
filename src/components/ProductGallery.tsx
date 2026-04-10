@@ -1,10 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button, Badge, Empty, Typography } from 'antd';
+import { Button, Empty, Typography } from 'antd';
 import { 
   LeftOutlined, 
   RightOutlined, 
-  CheckCircleFilled, 
-  CloseCircleFilled,
   ExpandAltOutlined
 } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'motion/react';
@@ -46,24 +44,24 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, status }) => {
 
   if (sortedImages.length === 0) {
     return (
-      <div className="aspect-square bg-gray-50 rounded-3xl flex flex-col items-center justify-center border-2 border-dashed border-gray-200">
-        <Empty description="Chưa có hình ảnh" />
+      <div className="aspect-square bg-surface rounded-[40px] flex flex-col items-center justify-center border-2 border-dashed border-border">
+        <Empty description={<Text className="text-text-muted font-bold">Chưa có hình ảnh</Text>} />
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Main Image Container */}
-      <div className="relative aspect-square bg-white rounded-2xl sm:rounded-[32px] overflow-hidden shadow-xl shadow-gray-100 group border border-gray-100">
+      <div className="relative aspect-square bg-surface rounded-[48px] overflow-hidden group border border-border">
         <AnimatePresence mode="wait">
           <motion.img
             key={sortedImages[activeIndex].id}
             src={sortedImages[activeIndex].public_url}
             initial={{ opacity: 0, scale: 1.1 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
             alt="Product Main"
@@ -76,57 +74,27 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, status }) => {
           />
         </AnimatePresence>
 
-        {/* Status Badge */}
-        <div className="absolute top-3 left-3 sm:top-6 sm:left-6 z-10">
-          <Badge 
-            count={status === 'available' ? 'Sẵn hàng' : 'Đã bán'} 
-            style={{ 
-              backgroundColor: status === 'available' ? '#52c41a' : '#ff4d4f',
-              padding: '0 12px',
-              height: '28px',
-              lineHeight: '28px',
-              borderRadius: '14px',
-              fontSize: '12px',
-              fontWeight: 'bold',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-            }} 
-            className="sm:hidden"
-          />
-          <Badge 
-            count={status === 'available' ? 'Sẵn hàng' : 'Đã bán'} 
-            style={{ 
-              backgroundColor: status === 'available' ? '#52c41a' : '#ff4d4f',
-              padding: '0 16px',
-              height: '32px',
-              lineHeight: '32px',
-              borderRadius: '16px',
-              fontSize: '14px',
-              fontWeight: 'bold',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-            }} 
-            className="hidden sm:block"
-          />
-        </div>
-
-        {/* Navigation Arrows - Hidden on small mobile */}
+        {/* Navigation Arrows */}
         {sortedImages.length > 1 && (
           <>
-            <Button 
-              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 opacity-0 sm:group-hover:opacity-100 transition-all duration-300 shadow-lg border-none bg-white/80 hover:bg-white backdrop-blur-sm h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center hidden sm:flex"
-              icon={<LeftOutlined />}
+            <button 
+              className="absolute left-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/90 backdrop-blur-xl w-14 h-14 rounded-full flex items-center justify-center text-primary shadow-2xl hover:bg-white active:scale-90"
               onClick={prevImage}
-            />
-            <Button 
-              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 opacity-0 sm:group-hover:opacity-100 transition-all duration-300 shadow-lg border-none bg-white/80 hover:bg-white backdrop-blur-sm h-10 w-10 sm:h-12 sm:w-12 rounded-full flex items-center justify-center hidden sm:flex"
-              icon={<RightOutlined />}
+            >
+              <LeftOutlined className="text-xl" />
+            </button>
+            <button 
+              className="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/90 backdrop-blur-xl w-14 h-14 rounded-full flex items-center justify-center text-primary shadow-2xl hover:bg-white active:scale-90"
               onClick={nextImage}
-            />
+            >
+              <RightOutlined className="text-xl" />
+            </button>
           </>
         )}
 
         {/* Zoom Icon Hint */}
-        <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 opacity-0 sm:group-hover:opacity-100 transition-opacity bg-black/20 backdrop-blur-md text-white p-1.5 sm:p-2 rounded-lg sm:rounded-xl">
-          <ExpandAltOutlined className="text-lg sm:text-xl" />
+        <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 backdrop-blur-md text-white w-12 h-12 rounded-2xl flex items-center justify-center">
+          <ExpandAltOutlined className="text-xl" />
         </div>
       </div>
 
@@ -134,8 +102,7 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, status }) => {
       {sortedImages.length > 1 && (
         <div 
           ref={scrollRef}
-          className="flex gap-2 sm:gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x touch-pan-x"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide snap-x touch-pan-x"
         >
           {sortedImages.map((img, index) => (
             <motion.div
@@ -144,8 +111,8 @@ const ProductGallery: React.FC<ProductGalleryProps> = ({ images, status }) => {
               whileTap={{ scale: 0.95 }}
               onClick={() => setActiveIndex(index)}
               className={`
-                flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer border-2 transition-all snap-center
-                ${activeIndex === index ? 'border-blue-500 shadow-lg shadow-blue-100 scale-105' : 'border-transparent opacity-60 hover:opacity-100'}
+                flex-shrink-0 w-24 h-24 rounded-3xl overflow-hidden cursor-pointer border-4 transition-all snap-center
+                ${activeIndex === index ? 'border-primary shadow-2xl shadow-primary/20 scale-105' : 'border-transparent opacity-40 hover:opacity-100'}
               `}
             >
               <img 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, Button, Tooltip, Badge, Popconfirm, Empty, Typography, App } from 'antd';
+import { Upload, Tooltip, Popconfirm, Empty, Typography } from 'antd';
 import { 
   PlusOutlined, DeleteOutlined, StarOutlined, StarFilled, 
   ArrowUpOutlined, ArrowDownOutlined, PictureOutlined 
@@ -31,15 +31,19 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <Text strong className="text-gray-700">Hình ảnh sản phẩm ({existingImages.length + fileList.length}/{maxCount})</Text>
-        <Text type="secondary" className="text-xs italic">* Kéo thả hoặc chọn nhiều ảnh</Text>
+        <Text className="text-xs font-black uppercase tracking-widest text-text-muted">
+          Hình ảnh ({existingImages.length + fileList.length}/{maxCount})
+        </Text>
+        <Text className="text-[10px] font-bold text-primary uppercase tracking-tighter italic">
+          * Kéo thả hoặc chọn nhiều ảnh
+        </Text>
       </div>
       
       {/* Grid View */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {/* Existing Images */}
         {existingImages.map((img, index) => (
-          <div key={img.id} className="relative group aspect-square border-2 border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-all">
+          <div key={img.id} className="relative group aspect-square border border-border rounded-3xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500">
             <img 
               src={img.public_url} 
               className="w-full h-full object-cover" 
@@ -48,16 +52,15 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             />
             
             {/* Overlay Actions */}
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2">
+            <div className="absolute inset-0 bg-primary/20 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col items-center justify-center gap-3 p-4">
               <div className="flex gap-2">
                 <Tooltip title={img.is_cover ? "Ảnh đại diện" : "Đặt làm ảnh đại diện"}>
-                  <Button 
-                    size="small" 
-                    shape="circle"
-                    icon={img.is_cover ? <StarFilled className="text-yellow-400" /> : <StarOutlined />} 
+                  <button 
                     onClick={() => onSetCover(img.id)}
-                    className={img.is_cover ? "border-yellow-400" : ""}
-                  />
+                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${img.is_cover ? 'bg-accent text-white' : 'bg-white text-text hover:bg-accent hover:text-white'}`}
+                  >
+                    {img.is_cover ? <StarFilled /> : <StarOutlined />}
+                  </button>
                 </Tooltip>
                 <Popconfirm
                   title="Xóa ảnh này?"
@@ -66,34 +69,35 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
                   cancelText="Hủy"
                   okButtonProps={{ danger: true }}
                 >
-                  <Button size="small" shape="circle" danger icon={<DeleteOutlined />} />
+                  <button className="w-10 h-10 rounded-full bg-white text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center">
+                    <DeleteOutlined />
+                  </button>
                 </Popconfirm>
               </div>
               <div className="flex gap-2">
-                <Button 
-                  size="small" 
-                  shape="circle"
-                  icon={<ArrowUpOutlined />} 
+                <button 
                   disabled={index === 0}
                   onClick={() => onMove(index, 'up')}
-                />
-                <Button 
-                  size="small" 
-                  shape="circle"
-                  icon={<ArrowDownOutlined />} 
+                  className="w-10 h-10 rounded-full bg-white text-text hover:bg-primary hover:text-white transition-all flex items-center justify-center disabled:opacity-30"
+                >
+                  <ArrowUpOutlined />
+                </button>
+                <button 
                   disabled={index === existingImages.length - 1}
                   onClick={() => onMove(index, 'down')}
-                />
+                  className="w-10 h-10 rounded-full bg-white text-text hover:bg-primary hover:text-white transition-all flex items-center justify-center disabled:opacity-30"
+                >
+                  <ArrowDownOutlined />
+                </button>
               </div>
             </div>
 
             {/* Cover Badge */}
             {img.is_cover && (
-              <div className="absolute top-2 left-2">
-                <Badge 
-                  count="Ảnh chính" 
-                  style={{ backgroundColor: '#1677ff', fontSize: '10px', height: '18px', lineHeight: '18px' }} 
-                />
+              <div className="absolute top-3 left-3">
+                <div className="bg-primary text-white text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">
+                  CHÍNH
+                </div>
               </div>
             )}
           </div>
@@ -111,20 +115,20 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
             beforeUpload={() => false}
             multiple
             showUploadList={true}
-            className="uploader-custom"
+            className="uploader-custom-modern"
           >
-            <div className="flex flex-col items-center justify-center text-gray-400 hover:text-blue-500 transition-colors">
-              <PlusOutlined className="text-2xl mb-2" />
-              <div className="text-xs font-medium">Thêm ảnh</div>
+            <div className="flex flex-col items-center justify-center text-text-muted hover:text-primary transition-all group">
+              <PlusOutlined className="text-3xl mb-2 group-hover:scale-125 transition-transform" />
+              <div className="text-[10px] font-black uppercase tracking-widest">Thêm ảnh</div>
             </div>
           </Upload>
         )}
       </div>
 
       {existingImages.length === 0 && fileList.length === 0 && (
-        <div className="py-12 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400">
-          <PictureOutlined className="text-4xl mb-3 opacity-20" />
-          <Text type="secondary">Chưa có hình ảnh nào</Text>
+        <div className="py-16 bg-surface rounded-[32px] border-2 border-dashed border-border flex flex-col items-center justify-center text-text-muted gap-4">
+          <PictureOutlined className="text-5xl opacity-10" />
+          <Text className="text-[10px] font-black uppercase tracking-widest opacity-50">Chưa có hình ảnh nào</Text>
         </div>
       )}
     </div>

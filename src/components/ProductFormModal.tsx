@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Modal, Form, Input, InputNumber, Select, Row, Col, 
-  Button, Space, Typography, App, Divider, Tag, Badge 
+  Button, Space, Typography, App, Divider, Tag, Badge, Spin
 } from 'antd';
 import { 
   InfoCircleOutlined, 
@@ -339,24 +339,23 @@ const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
         <Divider className="my-6 sm:my-8" />
 
-        <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
-          <Button 
+        <div className="flex flex-col sm:flex-row justify-end gap-3">
+          <button 
+            type="button"
             onClick={onCancel} 
             disabled={uploading}
-            className="rounded-xl h-10 sm:h-12 px-8 border-gray-200 hover:text-gray-600 order-2 sm:order-1"
-            type="text"
+            className="text-text-muted font-bold px-8 py-3 rounded-2xl hover:bg-surface transition-all order-2 sm:order-1"
           >
-            Hủy bỏ
-          </Button>
-          <Button 
-            type="primary" 
-            htmlType="submit" 
-            loading={uploading}
-            className="rounded-xl h-10 sm:h-12 px-12 shadow-lg shadow-blue-200 font-bold order-1 sm:order-2"
-            icon={<SaveOutlined />}
+            HỦY BỎ
+          </button>
+          <button 
+            type="submit" 
+            disabled={uploading}
+            className="btn-accent !h-14 !px-12 shadow-xl shadow-accent/20 order-1 sm:order-2"
           >
-            {editingPhone ? "Lưu thay đổi" : "Tạo sản phẩm"}
-          </Button>
+            {uploading ? <Spin size="small" className="mr-2" /> : <SaveOutlined />}
+            <span>{editingPhone ? "LƯU THAY ĐỔI" : "TẠO SẢN PHẨM"}</span>
+          </button>
         </div>
       </Form>
     </Modal>
