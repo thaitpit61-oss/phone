@@ -10,6 +10,7 @@ import {
   ArrowRightOutlined,
   ShoppingOutlined
 } from '@ant-design/icons';
+import { PhoneCall, Clock, MapPin } from 'lucide-react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { supabase, isSupabaseConfigured } from '../supabaseClient';
 import type { Phone } from '../types';
@@ -21,7 +22,6 @@ const { Title, Text } = Typography;
 const Home: React.FC = () => {
   const { session } = useOutletContext<{ session: Session | null }>();
   const navigate = useNavigate();
-  const { message } = App.useApp();
 
   const [phones, setPhones] = useState<Phone[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,7 +54,7 @@ const Home: React.FC = () => {
       if (error) throw error;
       setPhones(data || []);
     } catch (error: any) {
-      message.error('Lỗi khi tải dữ liệu: ' + error.message);
+      console.error('Lỗi khi tải dữ liệu: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -67,10 +67,10 @@ const Home: React.FC = () => {
         .delete()
         .eq('id', id);
       if (error) throw error;
-      message.success('Đã xóa sản phẩm');
+      console.log('Đã xóa sản phẩm');
       fetchPhones();
     } catch (error: any) {
-      message.error('Lỗi khi xóa: ' + error.message);
+      console.error('Lỗi khi xóa: ' + error.message);
     }
   };
 
@@ -86,34 +86,84 @@ const Home: React.FC = () => {
 
   return (
     <div className="space-y-16 pb-20">
-      {/* Hero Section - Mới, sạch và sang */}
-      <div className="relative h-[520px] sm:h-[620px] flex items-center rounded-[48px] overflow-hidden bg-gradient-to-br from-zinc-900 via-black to-zinc-950">
-        <div className="absolute inset-0 bg-[radial-gradient(at_center,#ffffff08_0%,transparent_70%)]" />
-        
-        <div className="relative z-10 max-w-3xl px-8 sm:px-16">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-5 py-2 rounded-full border border-white/10 mb-6">
-            <span className="text-xs font-black uppercase tracking-[0.125em] text-white/90">2026 COLLECTION</span>
+      {/* Hero Section - Redesigned based on sample image */}
+      <div className="bg-white rounded-[48px] overflow-hidden shadow-xl border border-border">
+        {/* Cover Image */}
+        <div className="relative h-64 sm:h-80 md:h-[400px] w-full bg-zinc-100">
+          <img 
+            src="https://images.unsplash.com/photo-1616348436168-de43ad0db179?q=80&w=2000&auto=format&fit=crop" 
+            alt="Cover" 
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+          {/* Avatar Overlay */}
+          <div className="absolute -bottom-16 left-8 md:left-12 flex items-end gap-6">
+            <div className="relative">
+              <div className="w-32 h-32 md:w-44 md:h-44 rounded-full border-[6px] border-white overflow-hidden shadow-2xl bg-white">
+                <div className="w-full h-full bg-[#1A3C34] flex flex-col items-center justify-center p-6 text-white">
+                  {/* Logo Placeholder - logo style in image */}
+                  <div className="font-black text-2xl md:text-4xl tracking-tighter mb-1">PTP</div>
+                  <div className="text-[6px] md:text-[8px] opacity-70 uppercase font-black text-center leading-tight">Thái Store</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="pb-4 mb-3 hidden sm:block">
+              <Title level={1} className="!m-0 !text-4xl md:!text-5xl font-black tracking-tight text-white drop-shadow-xl">
+                Thái Store
+              </Title>
+            </div>
           </div>
-
-          <Title level={1} className="!text-white !m-0 !text-6xl sm:!text-7xl lg:!text-8xl font-black tracking-tighter leading-none">
-            Điện thoại<br />cao cấp chính hãng
-          </Title>
-
-          <p className="mt-6 text-white/70 text-xl sm:text-2xl max-w-lg font-medium">
-            Những chiếc điện thoại tốt nhất với giá cạnh tranh nhất tại Việt Nam.
-          </p>
-
-          <button 
-            onClick={() => window.scrollTo({ top: 800, behavior: 'smooth' })}
-            className="mt-10 btn-accent !h-16 !px-14 !text-lg shadow-2xl shadow-primary/50 hover:shadow-primary/70 transition-all"
-          >
-            KHÁM PHÁ NGAY
-          </button>
         </div>
 
-        {/* Decorative phone image / overlay */}
-        <div className="absolute -bottom-20 right-10 hidden xl:block opacity-40">
-          <ShoppingOutlined className="text-[420px] text-white/10" />
+        {/* Info Area */}
+        <div className="px-8 md:px-12 pt-20 pb-10 space-y-10">
+          <div className="space-y-4 max-w-4xl">
+            <div className="sm:hidden mb-2">
+              <Title level={1} className="!m-0 !text-3xl font-black tracking-tight">
+                Thái Store
+              </Title>
+            </div>
+            <p className="text-text-muted text-sm md:text-base leading-relaxed font-medium">
+              Cung cấp các sản phẩm Điện Thoại/Máy tính bảng/Laptop/SmartWatch 🌏 Các sản phẩm tại Websites sẽ thường xuyên được điều chỉnh giảm giả mỗi ngày theo thị trường ******************* Tham gia cộng đồng của Điện Thoại Xanh để update lịch bản lô hàng mới và chương trình khuyến mại: 💬 Kênh Messenger: https://m.me/j/A...
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 pt-10 border-t border-border">
+            {/* Hotline Item */}
+            <div className="flex items-center gap-5 group">
+              <div className="w-14 h-14 rounded-2xl bg-surface flex items-center justify-center text-primary group-hover:scale-110 group-hover:bg-primary/10 transition-all duration-300">
+                <PhoneCall size={26} />
+              </div>
+              <div className="space-y-0.5">
+                <div className="text-[10px] font-black tracking-[0.2em] uppercase text-text-muted">HOTLINE</div>
+                <div className="text-lg font-bold">0375207610</div>
+              </div>
+            </div>
+
+            {/* Hours Item */}
+            <div className="flex items-center gap-5 group">
+              <div className="w-14 h-14 rounded-2xl bg-surface flex items-center justify-center text-green-600 group-hover:scale-110 group-hover:bg-green-50 transition-all duration-300">
+                <Clock size={26} />
+              </div>
+              <div className="space-y-0.5">
+                <div className="text-[10px] font-black tracking-[0.2em] uppercase text-text-muted">ĐANG MỞ CỬA</div>
+                <div className="text-lg font-bold">07:00 - 22:30</div>
+              </div>
+            </div>
+
+            {/* Location Item */}
+            <div className="flex items-center gap-5 group">
+              <div className="w-14 h-14 rounded-2xl bg-surface flex items-center justify-center text-red-500 group-hover:scale-110 group-hover:bg-red-50 transition-all duration-300">
+                <MapPin size={26} />
+              </div>
+              <div className="space-y-0.5">
+                <div className="text-[10px] font-black tracking-[0.2em] uppercase text-text-muted">ĐỊA CHỈ</div>
+                <div className="text-lg font-bold line-clamp-1">KCN amata Long Bình Biên Hòa Đồng Nai</div>
+                <div className="text-xs font-bold text-primary hover:underline cursor-pointer">Xem bản đồ</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -140,7 +190,7 @@ const Home: React.FC = () => {
               onChange={setBrandFilter}
               options={[
                 { value: 'all', label: 'TẤT CẢ HÃNG' },
-                ...brands.map(brand => ({ value: brand, label: brand.toUpperCase() }))
+                ...brands.map((brand: any) => ({ value: String(brand), label: String(brand).toUpperCase() }))
               ]}
             />
           </Col>
